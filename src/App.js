@@ -8,6 +8,7 @@ const App = () => {
   const [responseData, setResponseData] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [error, setError] = useState('');
+  const [getRequestData, setGetRequestData] = useState(null); // State to store GET request response
 
   const options = [
     { value: 'numbers', label: 'Numbers' },
@@ -15,12 +16,12 @@ const App = () => {
     { value: 'highest_lowercase_alphabet', label: 'Highest Lowercase Alphabet' }
   ];
 
-  // Handle form submission
+  // Handle form submission for POST request
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const parsedJson = JSON.parse(jsonData); // Validate JSON
-      const response = await axios.post('https://bajaj-submission-backend.onrender.com/bfhl', {
+      const response = await axios.post('http://localhost:3000/bfhl', {
         data: parsedJson.data,
         file_b64: parsedJson.file_b64 || ''
       });
@@ -28,6 +29,16 @@ const App = () => {
       setError('');
     } catch (err) {
       setError('Invalid JSON or error from backend');
+    }
+  };
+
+  // Handle GET request
+  const handleGetRequest = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/bfhl');
+      setGetRequestData(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
   };
 
@@ -60,6 +71,17 @@ const App = () => {
 
       {/* Error message */}
       {error && <p className="error">{error}</p>}
+
+      {/* Button to trigger GET request */}
+      <button onClick={handleGetRequest}>Fetch GET Request Data</button>
+
+      {/* Display GET request response */}
+      {getRequestData && (
+        <div>
+          <h2>GET Request Response</h2>
+          <pre>{JSON.stringify(getRequestData, null, 2)}</pre>
+        </div>
+      )}
 
       {/* Response dropdown filter */}
       {responseData && (
