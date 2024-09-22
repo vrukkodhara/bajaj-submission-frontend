@@ -72,8 +72,13 @@ const App = () => {
       {/* Error message */}
       {error && <p className="error">{error}</p>}
 
-      {/* Button to trigger GET request */}
-      <button onClick={handleGetRequest}>Fetch GET Request Data</button>
+      {/* Ensure this div wraps the button correctly */}
+      <div style={{ marginTop: '20px' }}>
+        {/* Button to trigger GET request */}
+        <button onClick={handleGetRequest} style={{ padding: '10px 20px' }}>
+          Fetch GET Request Data
+        </button>
+      </div>
 
       {/* Display GET request response */}
       {getRequestData && (
